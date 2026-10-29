@@ -23,7 +23,7 @@ export async function enviarLink(_: EstadoEntrar, dados: FormData): Promise<Esta
   const supabase = await supabaseUsuario();
   const { error } = await supabase.auth.signInWithOtp({
     email,
-    options: { emailRedirectTo: `${await origem()}/auth/callback?proximo=/painel` },
+    options: { emailRedirectTo: `${await origem()}/auth/confirmar?proximo=/painel` },
   });
   if (error) {
     const limite = /rate|limit|seconds/i.test(error.message);
@@ -35,7 +35,7 @@ export async function enviarLink(_: EstadoEntrar, dados: FormData): Promise<Esta
         : 'Não foi possível enviar o link agora. Tente de novo.',
     };
   }
-  return { ok: true, email, mensagem: `Enviamos um link para ${email}. Abra o e-mail neste mesmo aparelho e toque no link.` };
+  return { ok: true, email, mensagem: `Enviamos um link para ${email}. Abra o e-mail (pode ser no celular) e toque no link.` };
 }
 
 export async function entrarComGoogle(): Promise<void> {
