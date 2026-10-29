@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Painel da aniversariante 🎛️</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎛️</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/style.css">
+  <style>
+    .adm h2 { font-family: 'Bungee', sans-serif; font-weight: 400; color: var(--cyan); font-size: 20px; margin: 0 0 14px; }
+    .adm .card { margin-top: 18px; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+    .form-grid label, .lbl { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .12em; font-weight: 600; display: block; margin-bottom: 4px; }
+    .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th { text-align: left; color: var(--muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .1em; padding: 8px 6px; border-bottom: 1px solid var(--line); }
+    td { padding: 10px 6px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+    .tbl-wrap { overflow-x: auto; }
+    .pay { font-size: 12px; padding: 5px 10px; border-radius: 999px; box-shadow: none; background: rgba(255,255,255,.08); color: var(--muted); white-space: nowrap; }
+    .pay.on { background: rgba(61,255,154,.18); color: var(--green); }
+    .pay.off-opt { opacity: .45; }
+    .codecell { font-family: 'Bungee', sans-serif; color: var(--yellow); letter-spacing: .1em; }
+    .chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px 3px 3px; border-radius: 999px; background: rgba(255,255,255,.06); border: 1px solid var(--line); box-shadow: none; color: var(--muted); font-size: 13px; font-weight: 600; }
+    .chip svg { border-radius: 50%; }
+    .chip.on { background: rgba(61,255,154,.16); border-color: var(--green); color: var(--green); }
+    .chip:hover { transform: none; }
+    .m-item { padding: 14px 0; border-bottom: 1px solid var(--line); }
+    .m-item:last-child { border: 0; }
+    .warn { background: rgba(255,225,77,.12); border: 1px solid var(--yellow); color: var(--yellow); padding: 12px 16px; border-radius: 14px; margin-top: 16px; }
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+  </style>
+</head>
+<body>
+  <canvas id="sparkles"></canvas>
+  <div class="wrap adm">
+    <div class="topbar"><div class="brand">🎛️ PAINEL DA ANIVERSARIANTE</div><nav class="nav"><a href="/" target="_blank">Ver site ↗</a></nav></div>
+    <div id="app" style="margin-top:28px"></div>
+  </div>
+  <script src="/assets/common.js"></script>
+  <script src="/assets/avatar.js"></script>
+  <script src="/assets/admin.js"></script>
+</body>
+</html>

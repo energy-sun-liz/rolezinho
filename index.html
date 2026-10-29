@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aniversário 🎉</title>
+  <meta name="theme-color" content="#0a0518">
+  <meta property="og:title" content="Aniversário — app da festa">
+  <meta property="og:description" content="Contagem regressiva, avisos, quem já pagou e missões da festa.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🪩</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+  <canvas id="sparkles"></canvas>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">🪩 BDAY ARENA</div>
+      <nav class="nav">
+        <a href="#galera">Galera</a>
+        <a href="#avisos">Avisos</a>
+        <a href="#missoes">Missões</a>
+        <a href="#eu">Meu avatar</a>
+      </nav>
+    </div>
+
+    <header class="hero">
+      <div class="kicker">contagem regressiva</div>
+      <h1 id="title">Carregando…</h1>
+      <p class="sub" id="subtitle"></p>
+      <div class="date-pill" id="dates"></div>
+      <div id="countdown"></div>
+    </header>
+
+    <div class="grid three">
+      <div class="card"><h3>Por pessoa</h3><div class="big pink" id="price">—</div><small id="price-note"></small></div>
+      <div class="card"><h3>Local</h3><div class="big" id="place" style="font-size:22px">—</div><small id="info"></small></div>
+      <div class="card"><h3>Já garantiram</h3><div class="big" id="paid-count">—</div><small id="paid-note"></small></div>
+    </div>
+
+    <section id="galera">
+      <div class="sec-title"><h2>Quem já pagou</h2><p>Avatar brilhando = tudo pago ✨</p></div>
+      <div class="progress"><i id="bar" style="width:0"></i></div>
+      <div class="people" id="people"></div>
+    </section>
+
+    <section id="avisos">
+      <div class="sec-title"><h2>Avisos</h2><p>Atualizações da festa</p></div>
+      <div class="updates" id="updates"></div>
+    </section>
+
+    <section id="missoes">
+      <div class="sec-title"><h2>Missões</h2><p>Desafios para cumprir na festa</p></div>
+      <div class="missions" id="missions"></div>
+    </section>
+
+    <section id="eu">
+      <div class="sec-title"><h2>Minha área</h2><p>Entre com o seu código</p></div>
+      <div class="me-box" id="me"></div>
+    </section>
+
+    <footer>Feito com 💖 para a festa · <a href="/admin">área da aniversariante</a></footer>
+  </div>
+
+  <script src="/assets/common.js"></script>
+  <script src="/assets/avatar.js"></script>
+  <script src="/assets/app.js"></script>
+</body>
+</html>
