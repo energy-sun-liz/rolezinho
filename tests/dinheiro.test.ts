@@ -30,6 +30,8 @@ describe('formatos', () => {
     expect(reaisParaCentavos('R$ 1.234,56')).toBe(123456);
     expect(reaisParaCentavos('0,1')).toBe(10);
     expect(reaisParaCentavos('19,99')).toBe(1999);
+    expect(() => reaisParaCentavos('abc')).toThrow();
+    expect(() => reaisParaCentavos('')).toThrow();
   });
   it('mostra em reais', () => {
     expect(formatarReais(16550).replace(/\s/g, ' ')).toBe('R$ 165,50');

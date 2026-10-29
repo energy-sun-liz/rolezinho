@@ -19,6 +19,7 @@ export function formatarReais(centavos: number): string {
 /** Converte "120", "120,5", "R$ 1.234,56" em centavos. */
 export function reaisParaCentavos(texto: string): number {
   const limpo = texto.replace(/[^\d,.-]/g, '').replace(/\./g, '').replace(',', '.');
+  if (!/\d/.test(limpo)) throw new Error('Valor inválido.');
   const valor = Number(limpo);
   if (!Number.isFinite(valor) || valor < 0) throw new Error('Valor inválido.');
   return Math.round(valor * 100);

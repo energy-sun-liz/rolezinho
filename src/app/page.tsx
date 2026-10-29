@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { AvatarRolezinho } from '@/components/AvatarRolezinho';
 import { Logo } from '@/components/marca/Logo';
 import type { Avatar } from '@/lib/avatar';
@@ -38,9 +39,9 @@ export default function Inicio() {
             <AvatarRolezinho key={p.nome} avatar={p.avatar} tamanho={56} titulo={p.nome} className="ring-4 ring-noite" />
           ))}
         </div>
-        <span className="rounded-full bg-gradient-to-r from-rosa via-laranja to-amarelo px-6 py-3 font-bold text-noite">
-          Em breve: crie seu rolê
-        </span>
+        <Link href="/painel" className="rounded-full bg-gradient-to-r from-rosa via-laranja to-amarelo px-6 py-3 font-bold text-noite">
+          Criar meu rolê
+        </Link>
       </section>
 
       <section className="mx-auto grid w-full max-w-5xl gap-4 px-6 py-14 sm:grid-cols-2 lg:grid-cols-4">
@@ -67,7 +68,7 @@ export default function Inicio() {
       </section>
 
       <footer className="mt-auto border-t border-borda px-6 py-6 text-center text-sm text-anil/60">
-        Rolêzinho © 2026 · Em construção
+        Rolêzinho © 2026 · Em construção · <Link href="/entrar" className="underline">Área do organizador</Link>
       </footer>
     </main>
   );
