@@ -1,11 +1,12 @@
 // Teste de ponta a ponta do Modo Organizador: app rodando + Supabase real.
-// Uso: npm run build && npx next start -p 3519, e em outro terminal: npm run e2e
+// Uso: npm run build && npx next start -p 3000, e em outro terminal: npm run e2e
+// (porta 3000 porque é a liberada no login do Supabase)
 // Precisa das variáveis do .env.local (vercel env pull) e do Microsoft Edge instalado.
 // Cria usuários temporários e apaga tudo no fim. Não imprime chaves.
 import { createClient } from '@supabase/supabase-js';
 import { chromium } from 'playwright-core';
 
-const BASE = process.env.E2E_BASE ?? 'http://localhost:3519';
+const BASE = process.env.E2E_BASE ?? 'http://localhost:3000';
 const SHOTS = process.env.E2E_PRINTS; // pasta para salvar prints (opcional)
 const sistema = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY, { auth: { persistSession: false } });
 
@@ -37,6 +38,20 @@ try {
   await anon.goto(`${BASE}/auth/confirmar?token_hash=falso&type=magiclink`);
   ok(anon.url().includes('/entrar?erro=link'), 'link falso/expirado volta para /entrar com aviso');
   ok(await ve(anon.getByText('O link expirou')), 'aviso de link expirado aparece');
+
+  // Link real do e-mail (mesmo caminho do signInWithOtp), aberto num navegador novo de celular
+  {
+    const email = `e2e-link-${Date.now()}@exemplo.invalid`;
+    const u = await sistema.auth.admin.createUser({ email, email_confirm: true });
+    criados.push(u.data.user.id);
+    const l = await sistema.auth.admin.generateLink({ type: 'magiclink', email, options: { redirectTo: `${BASE}/auth/entrando` } });
+    const cel = await (await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true })).newPage();
+    await cel.goto(l.data.properties.action_link);
+    try { await cel.waitForURL('**/painel', { timeout: 20000 }); } catch {}
+    ok(cel.url().endsWith('/painel'), 'link do e-mail aberto em outro navegador (celular) entra no painel');
+    await cel.goto(`${BASE}/auth/entrando#error=access_denied&error_code=otp_expired`);
+    ok(await ve(cel.getByText('Este link expirou ou já foi usado.')), 'link expirado mostra aviso e botão de pedir outro');
+  }
 
   // Organizadora A (celular)
   const ctxA = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2 });

@@ -20,10 +20,10 @@ export async function enviarLink(_: EstadoEntrar, dados: FormData): Promise<Esta
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return { ok: false, mensagem: 'Digite um e-mail válido.', email };
   }
-  const supabase = await supabaseUsuario();
+  const supabase = await supabaseUsuario('implicit');
   const { error } = await supabase.auth.signInWithOtp({
     email,
-    options: { emailRedirectTo: `${await origem()}/auth/confirmar?proximo=/painel` },
+    options: { emailRedirectTo: `${await origem()}/auth/entrando` },
   });
   if (error) {
     const limite = /rate|limit|seconds/i.test(error.message);
