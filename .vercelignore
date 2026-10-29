@@ -1,3 +1,8 @@
 scripts
 README.md
 PROMPT-DESENVOLVIMENTO.md
+.env*
+.agents
+.claude
+skills-lock.json
+.gitignore

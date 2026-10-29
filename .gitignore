@@ -2,3 +2,6 @@ node_modules/
 .vercel/
 .env*
 PROMPT-DESENVOLVIMENTO.md
+.agents/
+.claude/
+skills-lock.json
