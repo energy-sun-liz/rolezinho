@@ -1,44 +1,39 @@
-# 🪩 App do Aniversário — tema neon
+# Rolêzinho
 
-Site da festa com contagem regressiva, avisos, quem já pagou (com avatar), missões e
-área do participante (cada convidado entra com seu código e personaliza o avatar).
-Painel da aniversariante em **/admin**.
+Seu rolê, sem complicação. Organizador cria o evento, convidado entra pelo link
+com um código, divide os custos e paga no Pix direto para quem organiza.
 
-## Publicar na Vercel (uns 10 minutos)
+## Como rodar no computador
 
-1. **GitHub** — crie um repositório novo (pode ser privado) e envie todos os arquivos
-   desta pasta (no site do GitHub: *Add file → Upload files* e arraste tudo).
-2. **Vercel** — em vercel.com, *Add New → Project*, importe o repositório.
-   Framework: **Other**. Não precisa de comando de build. Clique em *Deploy*.
-3. **Banco de dados (grátis)** — no projeto da Vercel: aba **Storage → Create Database →
-   Upstash for Redis** (plano Free) → conecte ao projeto. Isso cria sozinho as variáveis
-   `KV_REST_API_URL` e `KV_REST_API_TOKEN`.
-4. **Senha do painel** — *Settings → Environment Variables*: crie `ADMIN_PASSWORD`
-   com a senha que você quiser.
-5. **Redeploy** — aba *Deployments* → nos três pontinhos do último → *Redeploy*
-   (para as variáveis valerem).
+```bash
+npm install
+npm run dev        # http://localhost:3000
+npm test           # testes (dinheiro, Pix, datas, avatar e regras do banco)
+```
 
-Pronto: `seu-projeto.vercel.app` é o site e `seu-projeto.vercel.app/admin` é o painel.
+Sem as variáveis do Supabase o site abre normalmente; `/api/saude` mostra
+`"banco": "nao_configurado"`.
 
-## Como usar o painel
-
-- **Participantes**: cole os nomes (um por linha). Cada um ganha código e avatar aleatório.
-  O botão **📋 Convite** copia uma mensagem com o código e um link que já entra direto
-  na área da pessoa — é só colar no WhatsApp.
-- **Pagamentos**: clique em *pendente* para marcar *pago ✓* (clique de novo desfaz).
-- **Custos**: o aluguel (R$ 120) é obrigatório. Crie extras opcionais (bebidas,
-  churrasco…) — cada convidado escolhe na própria área se quer participar, ou você
-  inclui/tira pelo painel.
-- **Avisos**: publique novidades; use 📌 para fixar no topo.
-- **Missões**: no dia da festa, toque no nome de quem cumpriu cada desafio.
-- **Dados da festa**: título, datas (horário de Brasília), local, chave Pix.
-
-O site atualiza sozinho a cada 30 segundos para quem estiver com ele aberto.
-
-## Testar no computador (opcional)
+## Onde está cada coisa
 
 ```
-node scripts/dev-server.js
+src/app/                 páginas e rotas (Next.js 16, App Router)
+src/components/          componentes (marca, avatar)
+src/lib/pix.ts           lê o Pix copia-e-cola do organizador e gera o do convidado com valor
+src/lib/dinheiro.ts      valor devido, tickets de pagamento (pendente → informado → confirmado)
+src/lib/periodo.ts       período de 45 dias, relatório por 4 meses
+src/lib/avatar.ts        gerador de avatar em SVG
+supabase/migrations/     banco: tabelas, travas e regras de segurança (RLS)
+tests/                   testes automáticos
+prototipo/               app antigo da festa (HTML puro), só para referência
 ```
-Abra http://localhost:3000 — senha do painel: `teste`. Sem o Upstash, os dados ficam
-só na memória.
+
+## Decisões que valem saber
+
+- **Dinheiro em centavos**, sempre inteiro. Nada de `0.1 + 0.2`.
+- **O Rolêzinho não toca no dinheiro dos convidados.** O Pix vai direto para a
+  chave do organizador; o app só monta o código com o valor certo.
+- **RLS em todas as tabelas.** Visitante anônimo não lê nada direto do banco;
+  organizador só enxerga os próprios eventos; evento encerrado fica travado.
+- **Preços dos tipos de evento ficam no banco** (`event_types`), sem precisar
+  publicar o app de novo.

@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+/* Paleta do guia de marca Rolêzinho */
+@theme inline {
+  --color-noite: #14123a;
+  --color-anil: #1e1b5e;
+  --color-rosa: #ff2d87;
+  --color-laranja: #ff8a1a;
+  --color-amarelo: #ffc21a;
+  --color-azul: #22b8ff;
+  --color-roxo: #8b3dff;
+  --color-menta: #2ef0b5;
+  --color-papel: #fbfaff;
+  --color-lavanda: #f3f1fa;
+  --color-borda: #d6d2ea;
+
+  --font-sans: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+  --font-pincel: var(--font-pincel), cursive;
+}
+
+body {
+  background: var(--color-papel);
+  color: var(--color-anil);
+  font-family: var(--font-sans);
+}
+
+.font-pincel {
+  font-family: var(--font-pincel);
+}
