@@ -45,3 +45,6 @@ PROMPT-DESENVOLVIMENTO.md
 .agents/
 .claude/
 skills-lock.json
+
+# Supabase CLI
+supabase/.temp/
