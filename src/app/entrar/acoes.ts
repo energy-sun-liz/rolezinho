@@ -2,7 +2,8 @@
 
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { supabaseUsuario } from '@/lib/supabase/usuario';
+import { pedirLinkDeLogin } from '@/lib/linkDeLogin';
+import { chavesPublicas, supabaseUsuario } from '@/lib/supabase/usuario';
 
 export type EstadoEntrar = { ok: boolean; mensagem: string; email?: string };
 
@@ -20,18 +21,15 @@ export async function enviarLink(_: EstadoEntrar, dados: FormData): Promise<Esta
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return { ok: false, mensagem: 'Digite um e-mail válido.', email };
   }
-  const supabase = await supabaseUsuario('implicit');
-  const { error } = await supabase.auth.signInWithOtp({
-    email,
-    options: { emailRedirectTo: `${await origem()}/auth/entrando` },
-  });
+  const { url, chave } = chavesPublicas();
+  const { error } = await pedirLinkDeLogin(url, chave, email, `${await origem()}/auth/entrando`);
   if (error) {
     const limite = /rate|limit|seconds/i.test(error.message);
     return {
       ok: false,
       email,
       mensagem: limite
-        ? 'Muitos pedidos de link em pouco tempo. Espere alguns minutos e tente de novo.'
+        ? 'Já enviamos links demais nesta hora. Use o último link que chegou no seu e-mail ou tente de novo mais tarde.'
         : 'Não foi possível enviar o link agora. Tente de novo.',
     };
   }
