@@ -4,11 +4,11 @@ import { Logo } from '@/components/marca/Logo';
 import type { Avatar } from '@/lib/avatar';
 
 const GALERA: Array<{ nome: string; avatar: Avatar }> = [
-  { nome: 'Ana', avatar: { bg: '#ff2d87', skin: '#f5c49c', hair: 'long', hairColor: '#5b3a1e', eyes: 'happy', mouth: 'grin', acc: 'crown' } },
-  { nome: 'Beto', avatar: { bg: '#22b8ff', skin: '#8d5524', hair: 'afro', hairColor: '#1a1a1a', eyes: 'shades', mouth: 'cool', acc: 'none' } },
-  { nome: 'Carla', avatar: { bg: '#ffc21a', skin: '#ffe0c7', hair: 'bun', hairColor: '#e2412b', eyes: 'wink', mouth: 'smile', acc: 'bow' } },
-  { nome: 'Davi', avatar: { bg: '#8b3dff', skin: '#d9a066', hair: 'mohawk', hairColor: '#ff2d87', eyes: 'stars', mouth: 'tongue', acc: 'headphones' } },
-  { nome: 'Edu', avatar: { bg: '#ff8a1a', skin: '#b5774a', hair: 'curly', hairColor: '#1a1a1a', eyes: 'dots', mouth: 'open', acc: 'partyhat' } },
+  { nome: 'Ana', avatar: { bg: '#ff2d87', skin: '#f5c49c', hair: 'platinado', hairColor: '#f4ecd6', eyes: 'cilios', mouth: 'batom', acc: 'tiara', extra: 'pinta' } },
+  { nome: 'Beto', avatar: { bg: '#22b8ff', skin: '#8d5524', hair: 'afro', hairColor: '#1a1a1a', eyes: 'shades', mouth: 'cool', acc: 'microfone', extra: 'argolas' } },
+  { nome: 'Carla', avatar: { bg: '#ffc21a', skin: '#ffe0c7', hair: 'colmeia', hairColor: '#1a1a1a', eyes: 'gatinho', mouth: 'beijinho', acc: 'none', extra: 'none' } },
+  { nome: 'Davi', avatar: { bg: '#8b3dff', skin: '#d9a066', hair: 'topete', hairColor: '#e2412b', eyes: 'stars', mouth: 'grin', acc: 'none', extra: 'raio' } },
+  { nome: 'Edu', avatar: { bg: '#ff8a1a', skin: '#5c3a1e', hair: 'diva', hairColor: 'arco-iris', eyes: 'happy', mouth: 'batom', acc: 'oculos-coracao', extra: 'boa' } },
 ];
 
 const PILARES = [
