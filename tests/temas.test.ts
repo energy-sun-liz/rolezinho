@@ -24,8 +24,9 @@ describe('link da localização', () => {
 });
 
 describe('temas', () => {
-  it('cinco temas com cores e fonte, e Rolêzinho é o padrão', () => {
-    expect(TEMAS.map((t) => t.id)).toEqual(['rolezinho', 'neon', 'pastel', 'dourado', 'arcade']);
+  it('seis temas (com Pride) e Rolêzinho é o padrão', () => {
+    expect(TEMAS.map((t) => t.id)).toEqual(['rolezinho', 'neon', 'pastel', 'dourado', 'arcade', 'pride']);
+    expect(temaPorId('pride').amostra).toMatch(/#e40303.*#732982/);
     expect(temaPorId('neon').nome).toBe('Neon');
     expect(temaPorId('inventado').id).toBe('rolezinho');
   });

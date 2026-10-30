@@ -62,9 +62,13 @@ async function Conteudo({ params }: { params: PageProps<'/painel/festas/[id]'>['
         <Item rotulo="Tema">
           <span className="flex items-center gap-2">
             <span className="flex h-5 w-8 overflow-hidden rounded ring-1 ring-black/10" aria-hidden="true">
-              <span className="flex-1" style={{ background: temaPorId(f.tema).cores.fundo }} />
-              <span className="w-2" style={{ background: temaPorId(f.tema).cores.destaque }} />
-              <span className="w-2" style={{ background: temaPorId(f.tema).cores.destaque2 }} />
+              {temaPorId(f.tema).amostra ? <span className="flex-1" style={{ background: temaPorId(f.tema).amostra }} /> : (
+                <>
+                  <span className="flex-1" style={{ background: temaPorId(f.tema).cores.fundo }} />
+                  <span className="w-2" style={{ background: temaPorId(f.tema).cores.destaque }} />
+                  <span className="w-2" style={{ background: temaPorId(f.tema).cores.destaque2 }} />
+                </>
+              )}
             </span>
             {temaPorId(f.tema).nome}
           </span>

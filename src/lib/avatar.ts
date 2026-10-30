@@ -14,7 +14,7 @@ export const OPCOES = {
   eyes: ['dots', 'happy', 'wink', 'stars', 'shades', 'cilios', 'gatinho'],
   mouth: ['smile', 'grin', 'open', 'tongue', 'cool', 'batom', 'beijinho'],
   acc: ['none', 'partyhat', 'crown', 'headphones', 'bow', 'glasses', 'tiara', 'oculos-coracao', 'oculos-estrela', 'microfone'],
-  extra: ['none', 'argolas', 'raio', 'glitter', 'boa', 'pinta'],
+  extra: ['none', 'argolas', 'raio', 'glitter', 'boa', 'pinta', 'pintura-arco-iris'],
 } as const;
 
 export type ParteAvatar = keyof typeof OPCOES;
@@ -34,7 +34,7 @@ export const NOMES: Record<string, string> = {
   smile: 'sorriso', grin: 'sorrisão', open: 'uau', tongue: 'língua', cool: 'de lado', batom: 'batom vermelho', beijinho: 'beijinho',
   partyhat: 'chapéu de festa', crown: 'coroa', headphones: 'fone', bow: 'laço', glasses: 'óculos',
   tiara: 'tiara de brilhantes', 'oculos-coracao': 'óculos de coração', 'oculos-estrela': 'óculos de estrela', microfone: 'microfone de palco',
-  argolas: 'argolas', raio: 'raio glam', glitter: 'glitter', boa: 'boá de plumas', pinta: 'pinta charmosa',
+  argolas: 'argolas', raio: 'raio glam', glitter: 'glitter', boa: 'boá de plumas', pinta: 'pinta charmosa', 'pintura-arco-iris': 'pintura arco-íris',
   'arco-iris': 'arco-íris',
 };
 
@@ -154,6 +154,7 @@ function brilho(x: string): string {
     case 'raio': return `<path d="M58 40 L52 52 L58 52 L48 70 L52 56 L46 56 L52 40 Z" fill="#e2412b" stroke="#22b8ff" stroke-width="1.4" stroke-linejoin="round" opacity=".9"/>`;
     case 'glitter': return estrelinha(32, 63, 3.2, '#ffc21a') + estrelinha(68, 63, 3.2, '#ffc21a') + estrelinha(28, 58, 1.8, '#fff') + estrelinha(72, 58, 1.8, '#fff') + estrelinha(35, 68, 1.6, '#ff2d87') + estrelinha(65, 68, 1.6, '#22b8ff');
     case 'boa': return [[22, 86], [30, 82], [38, 84], [46, 81], [54, 81], [62, 84], [70, 82], [78, 86]].map(([cx, cy], i) => `<circle cx="${cx}" cy="${cy}" r="7" fill="${i % 2 ? '#ff6bb3' : '#ff2d87'}"/>`).join('');
+    case 'pintura-arco-iris': return ['#e40303', '#ff8c00', '#ffed00', '#008026', '#24408e', '#732982'].map((cor, i) => `<rect x="${63 + i * 1.6}" y="${59 + i * 1.6}" width="9" height="1.8" rx=".9" fill="${cor}" transform="rotate(-28 67 62)"/>`).join('');
     case 'pinta': return `<circle cx="63" cy="66" r="1.6" fill="${INK}"/>`;
     default: return '';
   }

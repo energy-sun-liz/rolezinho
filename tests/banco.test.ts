@@ -246,6 +246,8 @@ describe('localização e tema da festa', () => {
     const r = await como('authenticated', B, () =>
       q(`update events set local_link = 'https://maps.app.goo.gl/AbC123', tema = 'neon' where id = $1 returning tema`, [eventoB]));
     expect(r.rows[0].tema).toBe('neon');
+    const pride = await como('authenticated', B, () => q(`update events set tema = 'pride' where id = $1 returning tema`, [eventoB]));
+    expect(pride.rows[0].tema).toBe('pride');
   });
   it('recusa link que não é de mapa e tema inexistente', async () => {
     await expect(como('authenticated', B, () => q(`update events set local_link = 'https://golpe.com/maps' where id = $1`, [eventoB])))

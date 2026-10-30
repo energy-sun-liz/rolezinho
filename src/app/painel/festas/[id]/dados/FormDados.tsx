@@ -43,9 +43,13 @@ export function FormDados(v: Valores) {
               <label key={t.id} className="flex cursor-pointer items-center gap-3 rounded-2xl border-2 border-borda p-3 has-[:checked]:border-rosa">
                 <input type="radio" name="tema" value={t.id} defaultChecked={d.tema === t.id} className="accent-rosa" />
                 <span className="flex h-10 w-14 shrink-0 overflow-hidden rounded-lg ring-1 ring-black/10" aria-hidden="true">
-                  <span className="flex-1" style={{ background: t.cores.fundo }} />
-                  <span className="w-3" style={{ background: t.cores.destaque }} />
-                  <span className="w-3" style={{ background: t.cores.destaque2 }} />
+                  {t.amostra ? <span className="flex-1" style={{ background: t.amostra }} /> : (
+                    <>
+                      <span className="flex-1" style={{ background: t.cores.fundo }} />
+                      <span className="w-3" style={{ background: t.cores.destaque }} />
+                      <span className="w-3" style={{ background: t.cores.destaque2 }} />
+                    </>
+                  )}
                 </span>
                 <span className="flex flex-col">
                   <span className="font-bold">{t.nome}</span>

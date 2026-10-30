@@ -1,7 +1,11 @@
 // Temas visuais da festa (a página que os convidados veem). O painel do organizador
 // continua com a marca Rolêzinho; o tema muda a festa.
 
-export type IdTema = 'rolezinho' | 'neon' | 'pastel' | 'dourado' | 'arcade';
+export type IdTema = 'rolezinho' | 'neon' | 'pastel' | 'dourado' | 'arcade' | 'pride';
+
+/** Arco-íris da bandeira do orgulho (6 faixas). */
+export const ARCO_IRIS = ['#e40303', '#ff8c00', '#ffed00', '#008026', '#24408e', '#732982'];
+export const DEGRADE_ARCO_IRIS = `linear-gradient(90deg, ${ARCO_IRIS.join(', ')})`;
 
 export type Tema = {
   id: IdTema;
@@ -10,6 +14,8 @@ export type Tema = {
   /** fundo, cartão, texto, destaque 1, destaque 2 */
   cores: { fundo: string; cartao: string; texto: string; destaque: string; destaque2: string };
   fonteTitulo: string;
+  /** amostra especial (ex.: faixas do arco-íris); sem isso, a amostra usa as cores */
+  amostra?: string;
 };
 
 export const TEMAS: Tema[] = [
@@ -23,6 +29,9 @@ export const TEMAS: Tema[] = [
     cores: { fundo: '#0f0d0a', cartao: '#1c1812', texto: '#f6efe0', destaque: '#d4af37', destaque2: '#f3d98b' } },
   { id: 'arcade', nome: 'Arcade', descricao: 'Videogame anos 80: pixels e cores primárias.', fonteTitulo: 'Press Start 2P',
     cores: { fundo: '#0b1020', cartao: '#151d38', texto: '#e8f1ff', destaque: '#39ff14', destaque2: '#ff3864' } },
+  { id: 'pride', nome: 'Pride 🏳️‍🌈', descricao: 'Orgulho: arco-íris no título, nas bordas e nos botões.', fonteTitulo: 'Bungee',
+    cores: { fundo: '#120a1f', cartao: '#1e1233', texto: '#ffffff', destaque: '#ff4fa3', destaque2: '#ffd23f' },
+    amostra: `linear-gradient(180deg, ${ARCO_IRIS.join(', ')})` },
 ];
 
 export const temaPorId = (id: string | null | undefined): Tema => TEMAS.find((t) => t.id === id) ?? TEMAS[0];
