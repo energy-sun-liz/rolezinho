@@ -22,6 +22,8 @@ async function Conteudo({ params }: { params: PageProps<'/painel/festas/[id]/dad
         titulo={f.titulo}
         subtitulo={f.subtitulo}
         local={f.local}
+        local_link={f.local_link ?? ''}
+        tema={f.tema}
         festa_inicio={isoParaHoraLocal(f.festa_inicio)}
         festa_fim={isoParaHoraLocal(f.festa_fim)}
         periodo_inicio={f.periodo_inicio ?? ''}

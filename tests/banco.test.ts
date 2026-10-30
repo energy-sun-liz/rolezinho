@@ -177,3 +177,84 @@ describe('período e encerramento', () => {
     expect(r.rows).toEqual([]);
   });
 });
+
+describe('notificações e aparelhos (Web Push)', () => {
+  let orgA: string, orgB: string, notifA: string;
+
+  beforeAll(async () => {
+    orgA = (await q(`select id from organizers where auth_user_id = $1`, [A])).rows[0].id as string;
+    orgB = (await q(`select id from organizers where auth_user_id = $1`, [B])).rows[0].id as string;
+    notifA = (await como('service_role', null, () =>
+      q(`insert into notificacoes (organizer_id, tipo, titulo, corpo, link) values ($1, 'teste', 'Oi Ana', 'corpo', '/painel') returning id`, [orgA])
+    )).rows[0].id as string;
+  });
+
+  it('cada organizador só vê as próprias notificações', async () => {
+    const a = await como('authenticated', A, () => q(`select titulo from notificacoes`));
+    const b = await como('authenticated', B, () => q(`select titulo from notificacoes`));
+    expect(a.rows.map((r) => r.titulo)).toEqual(['Oi Ana']);
+    expect(b.rows).toEqual([]);
+  });
+
+  it('visitante anônimo não lê notificações nem aparelhos', async () => {
+    await expect(como('anon', null, () => q(`select * from notificacoes`))).rejects.toThrow(/permission denied/);
+    await expect(como('anon', null, () => q(`select * from push_inscricoes`))).rejects.toThrow(/permission denied/);
+  });
+
+  it('organizador só marca como lida, não muda o texto nem cria notificação', async () => {
+    await como('authenticated', A, () => q(`update notificacoes set lida_em = now() where id = $1`, [notifA]));
+    expect((await q(`select lida_em from notificacoes where id = $1`, [notifA])).rows[0].lida_em).not.toBeNull();
+    await expect(como('authenticated', A, () => q(`update notificacoes set titulo = 'hackeado' where id = $1`, [notifA])))
+      .rejects.toThrow(/permission denied/);
+    await expect(como('authenticated', A, () =>
+      q(`insert into notificacoes (organizer_id, tipo, titulo) values ($1, 'falsa', 'Falsa')`, [orgA])
+    )).rejects.toThrow(/permission denied/);
+  });
+
+  it('notificação só aceita link interno do app', async () => {
+    await expect(como('service_role', null, () =>
+      q(`insert into notificacoes (organizer_id, tipo, titulo, link) values ($1, 'x', 'X', 'https://golpe.com')`, [orgA])
+    )).rejects.toThrow(/check constraint/);
+    await expect(como('service_role', null, () =>
+      q(`insert into notificacoes (organizer_id, tipo, titulo, link) values ($1, 'x', 'X', '//golpe.com')`, [orgA])
+    )).rejects.toThrow(/check constraint/);
+  });
+
+  it('organizador inscreve o próprio aparelho, mas não em nome de outro', async () => {
+    await como('authenticated', A, () =>
+      q(`insert into push_inscricoes (organizer_id, endpoint, p256dh, auth) values ($1, 'https://push.exemplo/1', 'k', 'a')`, [orgA]));
+    await expect(como('authenticated', A, () =>
+      q(`insert into push_inscricoes (organizer_id, endpoint, p256dh, auth) values ($1, 'https://push.exemplo/2', 'k', 'a')`, [orgB])
+    )).rejects.toThrow(/row-level security/);
+    const deB = await como('authenticated', B, () => q(`select * from push_inscricoes`));
+    expect(deB.rows).toEqual([]);
+  });
+
+  it('visitante anônimo não executa as funções internas do banco', async () => {
+    await expect(como('anon', null, () => q(`select meu_organizer_id()`))).rejects.toThrow(/permission denied/);
+    await expect(como('anon', null, () => q(`select sou_dono_do_evento($1)`, [eventoB]))).rejects.toThrow(/permission denied/);
+  });
+
+  it('as travas continuam funcionando para o organizador depois do endurecimento', async () => {
+    const r = await como('authenticated', B, () => q(`update events set titulo = 'Festa do Beto 2' where id = $1 returning titulo`, [eventoB]));
+    expect(r.rows[0].titulo).toBe('Festa do Beto 2');
+  });
+});
+
+describe('localização e tema da festa', () => {
+  it('aceita link do Google Maps e tema neon', async () => {
+    const r = await como('authenticated', B, () =>
+      q(`update events set local_link = 'https://maps.app.goo.gl/AbC123', tema = 'neon' where id = $1 returning tema`, [eventoB]));
+    expect(r.rows[0].tema).toBe('neon');
+  });
+  it('recusa link que não é de mapa e tema inexistente', async () => {
+    await expect(como('authenticated', B, () => q(`update events set local_link = 'https://golpe.com/maps' where id = $1`, [eventoB])))
+      .rejects.toThrow(/check constraint/);
+    await expect(como('authenticated', B, () => q(`update events set local_link = 'https://maps.app.goo.gl.golpe.com/x' where id = $1`, [eventoB])))
+      .rejects.toThrow(/check constraint/);
+    await expect(como('authenticated', B, () => q(`update events set local_link = 'https://google.com.golpe.io/maps' where id = $1`, [eventoB])))
+      .rejects.toThrow(/check constraint/);
+    await expect(como('authenticated', B, () => q(`update events set tema = 'inventado' where id = $1`, [eventoB])))
+      .rejects.toThrow(/check constraint/);
+  });
+});

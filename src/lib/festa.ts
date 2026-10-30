@@ -1,6 +1,7 @@
 // Validação dos dados da festa (assistente "Criar festa"). Funções puras, testadas.
 import { reaisParaCentavos } from '@/lib/dinheiro';
 import { hojeNoBrasil, validarDataDaFesta } from '@/lib/periodo';
+import { temaPorId, validarLinkLocal, type IdTema } from '@/lib/temas';
 
 /** "Aniversário da Lizandra!" -> "aniversario-da-lizandra-x7k2" */
 export function gerarSlug(titulo: string, sufixo: string): string {
@@ -38,6 +39,8 @@ export type DadosFesta = {
   titulo: string;
   subtitulo: string;
   local: string;
+  local_link: string | null;
+  tema: IdTema;
   festa_inicio: string | null;
   festa_fim: string | null;
   periodo_inicio: string | null;
@@ -51,11 +54,14 @@ export function validarDadosDaFesta(form: FormData, hoje = hojeNoBrasil(), perio
   const titulo = texto(form.get('titulo'), 120);
   const subtitulo = texto(form.get('subtitulo'), 160);
   const local = texto(form.get('local'), 160);
+  const { link: local_link, erro: erroLink } = validarLinkLocal(texto(form.get('local_link'), 600));
+  const tema = temaPorId(texto(form.get('tema'), 20)).id;
   const inicioBruto = texto(form.get('festa_inicio'), 20);
   const fimBruto = texto(form.get('festa_fim'), 20);
   const periodo = texto(form.get('periodo_inicio'), 10) || null;
 
   if (!titulo) erros.push('Dê um nome para a festa.');
+  if (erroLink) erros.push(erroLink);
   const festa_inicio = inicioBruto ? horaLocalParaIso(inicioBruto) : null;
   const festa_fim = fimBruto ? horaLocalParaIso(fimBruto) : null;
   if (inicioBruto && !festa_inicio) erros.push('Data de início da festa inválida.');
@@ -70,7 +76,7 @@ export function validarDadosDaFesta(form: FormData, hoje = hojeNoBrasil(), perio
       if (problema) erros.push(problema);
     }
   }
-  return { erros, dados: { titulo, subtitulo, local, festa_inicio, festa_fim, periodo_inicio: periodo } };
+  return { erros, dados: { titulo, subtitulo, local, local_link, tema, festa_inicio, festa_fim, periodo_inicio: periodo } };
 }
 
 export function validarCusto(form: FormData): { erro: string | null; custo: { nome: string; valor_centavos: number; opcional: boolean } } {

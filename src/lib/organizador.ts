@@ -2,6 +2,7 @@
 import { redirect } from 'next/navigation';
 import { connection } from 'next/server';
 import { cache } from 'react';
+import { notificar } from '@/lib/notificacoes';
 import { supabaseUsuario } from '@/lib/supabase/usuario';
 
 export type Organizador = { id: string; nome: string; email: string };
@@ -28,7 +29,16 @@ export const organizadorAtual = cache(async (): Promise<{ supabase: Awaited<Retu
     .insert({ auth_user_id: user.id, nome: nomeInicial.slice(0, 80), email })
     .select('id, nome, email')
     .single();
-  if (novo.data) return { supabase, organizador: novo.data };
+  if (novo.data) {
+    await notificar({
+      para: { organizerId: novo.data.id },
+      tipo: 'boas_vindas',
+      titulo: 'Bem-vindo ao Rolêzinho! 🎉',
+      corpo: 'Crie sua primeira festa e instale o app na tela de início para receber os avisos.',
+      link: '/painel/nova',
+    }).catch(() => undefined);
+    return { supabase, organizador: novo.data };
+  }
   // Duas abas criando ao mesmo tempo: a outra já criou, é só buscar.
   if (novo.error?.code === '23505') {
     const deNovo = await buscar();

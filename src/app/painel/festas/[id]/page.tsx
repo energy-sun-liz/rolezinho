@@ -4,6 +4,7 @@ import { Suspense } from 'react';
 import { SeloStatus } from '@/components/painel/Selo';
 import { formatarReais } from '@/lib/dinheiro';
 import { calcularPeriodo } from '@/lib/periodo';
+import { temaPorId } from '@/lib/temas';
 import { apagarRascunho } from './acoes';
 import { carregarFesta, type Festa } from './carregar';
 import { Cabecalho, Passos } from './Passos';
@@ -52,7 +53,22 @@ async function Conteudo({ params }: { params: PageProps<'/painel/festas/[id]'>['
         <Item rotulo="Festa">
           {f.festa_inicio && f.festa_fim ? `${dataHora(f.festa_inicio)} até ${dataHora(f.festa_fim)}` : 'A definir'}
         </Item>
-        <Item rotulo="Local">{f.local || 'A definir'}</Item>
+        <Item rotulo="Local">
+          {f.local || 'A definir'}
+          {f.local_link && (
+            <a href={f.local_link} target="_blank" rel="noopener noreferrer" className="mt-1 block text-sm font-bold text-rosa underline">📍 Como chegar</a>
+          )}
+        </Item>
+        <Item rotulo="Tema">
+          <span className="flex items-center gap-2">
+            <span className="flex h-5 w-8 overflow-hidden rounded ring-1 ring-black/10" aria-hidden="true">
+              <span className="flex-1" style={{ background: temaPorId(f.tema).cores.fundo }} />
+              <span className="w-2" style={{ background: temaPorId(f.tema).cores.destaque }} />
+              <span className="w-2" style={{ background: temaPorId(f.tema).cores.destaque2 }} />
+            </span>
+            {temaPorId(f.tema).nome}
+          </span>
+        </Item>
         <Item rotulo="Período ativo (45 dias)">{periodo ? `${dataBr(periodo.inicio)} a ${dataBr(periodo.fim)}` : 'A definir'}</Item>
         <Item rotulo="Relatório disponível até">{periodo ? dataBr(periodo.relatorioAte) : '—'}</Item>
         <Item rotulo="Cada convidado paga">{f.costs.length ? formatarReais(porPessoa) : '—'}</Item>

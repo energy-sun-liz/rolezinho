@@ -8,6 +8,8 @@ export type Festa = {
   titulo: string;
   subtitulo: string;
   local: string;
+  local_link: string | null;
+  tema: string;
   status: StatusEvento;
   festa_inicio: string | null;
   festa_fim: string | null;
@@ -30,7 +32,7 @@ export async function carregarFesta(id: string): Promise<Festa> {
   const { supabase } = await organizadorAtual();
   const { data } = await supabase
     .from('events')
-    .select('id, slug, titulo, subtitulo, local, status, festa_inicio, festa_fim, periodo_inicio, periodo_fim, relatorio_ate, pix_copia_cola_base, pix_chave, pix_nome_recebedor, pix_cidade, event_types(nome, preco_centavos, max_convidados), costs(id, nome, valor_centavos, opcional)')
+    .select('id, slug, titulo, subtitulo, local, local_link, tema, status, festa_inicio, festa_fim, periodo_inicio, periodo_fim, relatorio_ate, pix_copia_cola_base, pix_chave, pix_nome_recebedor, pix_cidade, event_types(nome, preco_centavos, max_convidados), costs(id, nome, valor_centavos, opcional)')
     .eq('id', id)
     .order('criado_em', { referencedTable: 'costs' })
     .maybeSingle<Festa>();

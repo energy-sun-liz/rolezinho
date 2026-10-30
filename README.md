@@ -28,6 +28,24 @@ tests/                   testes automáticos
 prototipo/               app antigo da festa (HTML puro), só para referência
 ```
 
+## App instalável e notificações
+
+- `src/app/manifest.ts` + `public/icones/` (gerados por `node scripts/gerar-icones.mjs`)
+  deixam o Rolêzinho ser adicionado à tela de início; `/instalar` explica o passo a passo.
+- `public/sw.js` recebe as notificações com o app fechado (Web Push, chaves VAPID nas
+  variáveis `NEXT_PUBLIC_VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT`).
+- `src/lib/notificacoes.ts` → `notificar()` grava no sino (tabela `notificacoes`) e envia
+  para os aparelhos inscritos. O sino atualiza na hora pelo Supabase Realtime.
+- No iPhone, notificação só funciona com o app instalado na tela de início (iOS 16.4+).
+
+## Testes de ponta a ponta
+
+```bash
+npm run build && npx next start -p 3000   # porta 3000: a liberada no login do Supabase
+npm run e2e                 # Modo Organizador
+npm run e2e:notificacoes    # app instalável + notificações
+```
+
 ## Decisões que valem saber
 
 - **Dinheiro em centavos**, sempre inteiro. Nada de `0.1 + 0.2`.

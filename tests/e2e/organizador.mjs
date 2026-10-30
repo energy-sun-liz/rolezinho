@@ -84,10 +84,16 @@ try {
   await a.locator('input[name=local]').fill('Chácara Recanto');
   await a.locator('input[name=festa_inicio]').fill('2026-11-20T18:00');
   await a.locator('input[name=festa_fim]').fill('2026-11-22T18:00');
+  await a.locator('input[name=local_link]').fill('https://google.com.golpe.io/maps');
+  await a.getByText('Neon', { exact: true }).click();
+  await a.getByRole('button', { name: 'Salvar e continuar →' }).click();
+  ok(await ve(a.getByText(/Use um link do Google Maps, Waze ou Apple Mapas/)), 'recusa link de localização que imita o Google');
+  await a.locator('input[name=local_link]').fill('https://maps.app.goo.gl/AbC123xyz');
+  ok(await a.locator('input[name=tema][value=neon]').isChecked(), 'depois do erro, o tema escolhido continua marcado');
   if (SHOTS) await a.screenshot({ path: `${SHOTS}/3-dados.png`, fullPage: true });
   await a.getByRole('button', { name: 'Salvar e continuar →' }).click();
   await a.waitForURL('**/custos');
-  ok(true, 'dados e datas salvos, vai para "Custos e Pix"');
+  ok(true, 'dados, link do Maps e tema salvos, vai para "Custos e Pix"');
 
   // Custos
   await a.getByLabel('Nome do custo').fill('Aluguel da chácara');
@@ -133,6 +139,8 @@ try {
   ok(await ve(a.getByText('01/11/2026 a 15/12/2026')), 'período de 45 dias calculado');
   ok(await ve(a.getByText('15/04/2027')), 'relatório disponível por 4 meses');
   ok(await ve(a.getByText('R$ 39,90')), 'preço do tipo Chácara no resumo');
+  ok(await ve(a.getByRole('link', { name: '📍 Como chegar' })), 'resumo tem o botão "Como chegar"');
+  ok(await ve(a.getByText('Neon', { exact: true })), 'resumo mostra o tema Neon');
   if (SHOTS) await a.screenshot({ path: `${SHOTS}/5-resumo.png`, fullPage: true });
 
   await a.goto(`${BASE}/painel`);
